@@ -25,16 +25,16 @@ struct Simulation {
     bodies: [Body; 3],
 }
 
-const TIME_STEP: f64 = 0.01;
+const TIME_STEP: f64 = 0.5;
 const STEPS: usize = 100_000;
 const GRAVITATIONAL_CONSTANT: f64 = 6.67430e-11;
 
 fn main() {
-    let first = Body::new((0.3089693008, 0.4236727692));
-    let second = Body::new((-0.5, 0.0));
-    let third = Body::new((0.5, 0.0));
+    let mut first = Body::new((0.3089693008, 0.4236727692));
+    let mut second = Body::new((-0.5, 0.0));
+    let mut third = Body::new((0.5, 0.0));
 
-    let mut steps = Vec::<Step>::with_capacity(STEPS);
+    // let mut steps = Vec::<Step>::with_capacity(STEPS);
 
     for n in 0..STEPS {
         let mut new_step = Step {
@@ -69,8 +69,13 @@ fn main() {
             body.position.1 += body.velocity.1 * TIME_STEP;
         }
 
-        if n % 1000 == 0 {
-            println!("{:.02}, {:.02}", first.position.0, first.position.1);
+        // report current state
+        if n % 1_000 == 0 {
+            println!("{:.06}, {:.06}", first.position.0, first.position.1);
         }
+
+        first = new_step.bodies[0];
+        second = new_step.bodies[1];
+        third = new_step.bodies[2];
     }
 }
